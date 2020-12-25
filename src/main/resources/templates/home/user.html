@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">CRUD</h5>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" th:if="${CurrentUser != null} and ${CurrentUser.rolesToString().contains('ROLE_ADMIN')}" href="/admin">Admin</a>
+        <a class="p-2 text-dark" th:if="${CurrentUser != null} and ${CurrentUser.rolesToString().contains('ROLE_USER')}" href="/user">Profile</a>
+        <a class="p-2 text-dark" href="/logout">Logout</a>
+    </nav>
+</div>
+
+<h3>Hello! <span th:text="${CurrentUser.username}"></span> It's your profile</h3>
+<table class="table">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Username</th>
+        <th scope="col">Email</th>
+        <th scope="col">Roles</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+    </tr>
+    <tr>
+        <td th:text="${CurrentUser.getId()}">NULL</td>
+        <td th:text="${CurrentUser.getUsername()}">NULL</td>
+        <td th:text="${CurrentUser.getEmail()}">NULL</td>
+        <td th:text="${CurrentUser.rolesToString()}">NULL</td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+
+</body>
+</html>
