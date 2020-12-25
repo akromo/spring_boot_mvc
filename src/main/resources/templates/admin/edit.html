@@ -22,7 +22,7 @@
         <h2>Creating new user</h2>
     </div>
     <div class="col-md-12 order-md-1">
-        <form class="needs-validation" novalidate th:method="PATCH" th:action="@{/admin/{id}(id=${user.getId()})}"
+        <form class="needs-validation" novalidate th:method="POST" th:action="@{/admin/{id}/edit(id=${user.getId()})}"
               th:object="${user}">
             <div class="row">
                 <div class="col-md-6 mb-3">

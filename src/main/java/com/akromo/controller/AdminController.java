@@ -52,7 +52,7 @@ public class AdminController {
         return "admin/edit";
     }
 
-    @PatchMapping("/{id}")
+    @PostMapping("/{id}/edit")
     public String update(@ModelAttribute("user") User user, @RequestParam("selectedRoles") String[] roles) {
         List<Role> newList = new ArrayList<>();
         for (String name: roles) {
@@ -63,7 +63,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}/delete")
     public String delete(@PathVariable("id") long id) {
         userService.remove(id);
         return "redirect:/admin";
