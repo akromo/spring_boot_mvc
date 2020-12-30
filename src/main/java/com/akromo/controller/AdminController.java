@@ -26,18 +26,17 @@ public class AdminController {
     @GetMapping
     public String index(Model model) {
         model.addAttribute("users", userService.listUsers());
+        model.addAttribute("BDroles", userService.getAllRoles());
         return "admin/index";
     }
 
-    @GetMapping("/new")
-    public String newUser(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("BDroles", userService.getAllRoles());
-        return "admin/create";
-    }
-
     @PostMapping()
-    public String create(@ModelAttribute("user") User user, @RequestParam("selectedRoles") String[] roles) {
+    public String create(@RequestParam("userName") String userName, @RequestParam("email") String email,
+                         @RequestParam("password") String password, @RequestParam("selectedRoles") String[] roles) {
+        User user = new User();
+        user.setUsername(userName);
+        user.setPassword(password);
+        user.setEmail(email);
         for (String name: roles) {
             user.getRoles().add(userService.getRoleByName(name));
         }

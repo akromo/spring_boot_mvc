@@ -5,37 +5,58 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
 <body>
-<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-    <h5 class="my-0 mr-md-auto font-weight-normal">CRUD</h5>
-    <nav class="my-2 my-md-0 mr-md-3">
-        <a class="p-2 text-dark" th:if="${CurrentUser != null} and ${CurrentUser.rolesToString().contains('ROLE_ADMIN')}" href="/admin">Admin</a>
-        <a class="p-2 text-dark" th:if="${CurrentUser != null} and ${CurrentUser.rolesToString().contains('ROLE_USER')}" href="/user">Profile</a>
-        <a class="p-2 text-dark" href="/logout">Logout</a>
+<div th:insert="~{base :: navBar}"></div>
+<div class="row">
+    <nav class="col-md-1 d-none d-md-block sidebar" style="padding-right: 0px;">
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link h5"
+                       th:if="${CurrentUser != null} and ${CurrentUser.rolesToString().contains('ADMIN')}"
+                       href="/admin">Admin <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link h5 bg-primary" style="color: #f8f9fa;"
+                       th:if="${CurrentUser != null} and ${CurrentUser.rolesToString().contains('USER')}" href="/user">User</a>
+                </li>
+            </ul>
+        </div>
     </nav>
+    <div class="col-md-11 jumbotron">
+        <h3>User information-page</h3>
+        <table class="table">
+            <thead><h3>About user</h3></thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Roles</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            <tr>
+                <td th:text="${CurrentUser.getId()}">NULL</td>
+                <td th:text="${CurrentUser.getUsername()}">NULL</td>
+                <td th:text="${CurrentUser.getEmail()}">NULL</td>
+                <td th:text="${CurrentUser.rolesToString()}">NULL</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
 </div>
-
-<h3>Hello! <span th:text="${CurrentUser.username}"></span> It's your profile</h3>
-<table class="table">
-    <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Username</th>
-        <th scope="col">Email</th>
-        <th scope="col">Roles</th>
-        <th scope="col"></th>
-        <th scope="col"></th>
-    </tr>
-    <tr>
-        <td th:text="${CurrentUser.getId()}">NULL</td>
-        <td th:text="${CurrentUser.getUsername()}">NULL</td>
-        <td th:text="${CurrentUser.getEmail()}">NULL</td>
-        <td th:text="${CurrentUser.rolesToString()}">NULL</td>
-        <td></td>
-        <td></td>
-    </tr>
-</table>
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>

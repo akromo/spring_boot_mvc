@@ -83,10 +83,9 @@ public class User implements UserDetails {
         }
         StringBuilder result = new StringBuilder("");
         for (Role r: roles) {
-            result.append(r.getName());
-            result.append(", ");
+            result.append(r.getName().substring(5));
+            result.append(" ");
         }
-        result.delete(result.length()-2, result.length()-1);
         return result.toString();
     }
 
