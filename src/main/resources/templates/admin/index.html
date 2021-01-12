@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 </head>
 <body>
 <div th:insert="~{base :: navBar}"></div>
@@ -47,12 +48,12 @@
                         <th scope="col"></th>
                         <th scope="col"></th>
                     </tr>
-                    <tr th:each="user: ${users}">
-                        <td th:text="${user.getId()}">NULL</td>
-                        <td th:text="${user.getUsername()}">NULL</td>
-                        <td th:text="${user.getEmail()}">NULL</td>
-                        <td th:text="${user.rolesToString()}">NULL</td>
-                        <th><button type="button" class="btn btn-primary" data-toggle="modal" th:attrappend="data-target=${user.getUsername()}" data-target="#Edit">
+                    <tr th:each="user: ${users} " th:attr="id=${user.getId()}">
+                        <td id="id" th:text="${user.getId()}">NULL</td>
+                        <td id="usernameTable" th:text="${user.getUsername()}">NULL</td>
+                        <td id="emailTable" th:text="${user.getEmail()}">NULL</td>
+                        <td id="roleTable" th:text="${user.rolesToString()}">NULL</td>
+                        <th><button th:attr="id=${user.getId()}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#Edit">
                             Edit
                         </button></th>
                         <th>
@@ -69,33 +70,33 @@
                 </div>
                 <div class="col-md-12 order-md-1">
                     <form class="needs-validation" novalidate th:method="POST" th:action="@{/admin}">
-                        <div class="row">
+                        <div>
                             <div class="col-md-6 mb-3">
-                                <label for="username">Username </label>
+                                <label for="usernameС">Username </label>
                                 <div class="input-group">
-                                    <input req type="text" class="form-control" name="userName" id="username"
+                                    <input req type="text" class="form-control" name="userName" id="usernameС"
                                            placeholder="Username" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="email">Email </label>
+                                <label for="emailС">Email </label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="email" id="email"
+                                    <input type="text" class="form-control" name="email" id="emailС"
                                            placeholder="email@example.com" required>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div>
                             <div class="col-md-6 mb-3">
-                                <label for="password">Password </label>
+                                <label for="passwordС">Password </label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control" name="password" id="password"
+                                    <input type="password" class="form-control" name="password" id="passwordС"
                                            placeholder="Password" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="role">Role </label>
-                                <select class="custom-select d-block w-100" id="role" name="selectedRoles" multiple
+                                <label for="roleС">Role </label>
+                                <select class="custom-select d-block w-100" id="roleС" name="selectedRoles" multiple
                                         required>
                                     <option th:each="role : ${BDroles}" th:text="${role.getName()}"
                                             th:value="${role.getName()}"></option>
@@ -110,7 +111,17 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="Edit" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true" th:attrappend="username=${user.getUsername()}">
+<div class="modal fade" id="Edit" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <script>
+        $('.table button').on('click', function (){
+            let selctedUserID = $(this).attr("id")
+            $("#Edit #idEdit").val(selctedUserID);
+            $("#Edit #username").val($(`tr[id=${selctedUserID}] td[id=usernameTable]`).text());
+            $("#Edit #email").val($(`tr[id=${selctedUserID}] td[id=emailTable]`).text());
+            $("#Edit form").attr("action", `/admin/${selctedUserID}/edit`).append();
+
+        })
+    </script>
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -121,49 +132,53 @@
             </div>
             <div class="modal-body">
                 <div class="col-md-12 order-md-1">
-                    <form class="needs-validation" novalidate th:method="POST" th:action="@{/admin/{id}/edit(id=${user.getId()})}">
-                        <div class="row">
+                    <form class="needs-validation" novalidate method="POST">
+                        <div>
                             <div class="col-md-6 mb-3">
+                                <label for="idEdit">id </label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="idEdit"
+                                           placeholder="ID" required>
+                                </div>
                                 <label for="username">Username </label>
                                 <div class="input-group">
-                                    <input req type="text" class="form-control" name="userName" id="username" th:value="${user.getUsername()}"
+                                    <input type="text" class="form-control" id="username" name="username"
                                            placeholder="Username" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="email">Email </label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="email" id="email"
+                                    <input type="text" class="form-control" id="email" name="email"
                                            placeholder="email@example.com" required>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div>
                             <div class="col-md-6 mb-3">
                                 <label for="password">Password </label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control" name="password" id="password"
+                                    <input type="password" class="form-control" id="password" name="password"
                                            placeholder="Password" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="role">Role </label>
-                                <select class="custom-select d-block w-100" id="role" name="selectedRoles" multiple
-                                        required>
-                                    <option th:each="role : ${BDroles}" th:text="${role.getName()}"
-                                            th:value="${role.getName()}"></option>
+                                <select class="custom-select d-block w-100" id="role" name="selectedRoles" multiple required>
+                                    <option th:each="role : ${BDroles}" th:text="${role.getName()}" th:value="${role.getName()}"></option>
                                 </select>
                             </div>
                         </div>
-                        <br>
-                        <button class="btn btn-primary btn-lg btn-block" type="submit"> Create</button>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button class="btn btn-primary btn-lg btn-block" type="submit">Edit</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <input type="submit" class="btn btn-primary">Edit</input>
-            </div>
+
         </div>
     </div>
 </div>
