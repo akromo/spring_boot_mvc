@@ -21,7 +21,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link h5 bg-primary" style="color: #f8f9fa;"
-                       th:if="${CurrentUser != null} and ${CurrentUser.rolesToString().contains('USER')}" href="/user">User</a>
+                       th:if="${CurrentUser != null} and (${CurrentUser.rolesToString().contains('USER')} or ${CurrentUser.rolesToString().contains('ADMIN')})" href="/user">User</a>
                 </li>
             </ul>
         </div>
