@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
-<body>
+<body style="background: #e9ecef;">
 <div th:insert="~{base :: navBar}"></div>
 <div class="row">
-    <nav class="col-md-1 d-none d-md-block sidebar" style="padding-right: 0px;">
+    <nav class="col-md-1 d-none d-md-block sidebar" style="padding-right: 0px; background: #fff; min-height: 100vh;">
         <div class="sidebar-sticky">
             <ul class="nav flex-column">
                 <li class="nav-item">
@@ -26,10 +26,10 @@
             </ul>
         </div>
     </nav>
-    <div class="col-md-11 jumbotron">
+    <div class="col-md-11 jumbotron py-0">
         <h3>User information-page</h3>
-        <table class="table">
-            <thead><h3>About user</h3></thead>
+        <table class="table"  style="background: white">
+            <thead style="border-color: gray"><h4>About user</h4></thead>
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Username</th>
@@ -49,9 +49,6 @@
         </table>
     </div>
 </div>
-<script>
-    alert("test")
-</script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>

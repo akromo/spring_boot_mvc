@@ -83,7 +83,7 @@ public class User implements UserDetails {
         }
         StringBuilder result = new StringBuilder("");
         for (Role r: roles) {
-            result.append(r.getName().substring(5));
+            result.append(r.getName());
             result.append(" ");
         }
         return result.toString();
