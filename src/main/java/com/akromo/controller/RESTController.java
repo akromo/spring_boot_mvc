@@ -1,12 +1,11 @@
 package com.akromo.controller;
 
+import com.akromo.models.Role;
 import com.akromo.models.User;
 import com.akromo.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,9 +18,35 @@ public class RESTController {
         this.userService = userService;
     }
 
+    private User prepareUser(User rawUser) {
+        User preparedUser = new User();
+        preparedUser.setUsername(rawUser.getUsername());
+        preparedUser.setEmail(rawUser.getEmail());
+        preparedUser.setId(rawUser.getId());
+        for (Role role: rawUser.getRoles()) {
+            preparedUser.getRoles().add(new Role(role.getName()));
+        }
+        return preparedUser;
+    }
+
+    @GetMapping("/user/{id}")
+    public User getUser(@PathVariable long id) {
+        User rawUser = userService.getUser(id);
+        return prepareUser(rawUser);
+    }
+
     @GetMapping("/users")
     public List<User> users() {
-        return null;
+        List<User> preparedUsers = new ArrayList<>();
+        for(User user: userService.listUsers()) {
+            preparedUsers.add(prepareUser(user));
+        }
+        return preparedUsers;
+    }
+
+    @GetMapping("/roles")
+    public List<Role> getRoles() {
+        return userService.getAllRoles();
     }
 
     @PostMapping("/create")
