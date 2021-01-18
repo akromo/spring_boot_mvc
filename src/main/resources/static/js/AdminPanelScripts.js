@@ -23,21 +23,26 @@ async function drawUsersTable() {
     usersData.forEach((user) => {
         let row = document.createElement('tr');
         // 6 id username email role edit delete
-
-        let td = document.createElement('td')
-        td.append(document.createTextNode(user.id))
-        row.append(td);
-
-        row.append(document.createElement('td').append(document.createTextNode(user.username)))
-
-
-        row.append(document.createElement('td').after(td => td.append(document.createTextNode(user.username))));
-        row.append(document.createElement('td').append(document.createTextNode(user.email)));
         let userRoles = '';
-        user.roles.forEach((role) => {
-            userRoles + role.name + ' ';
-        });
-        row.append(document.createElement('td').setAttribute('text', userRoles));
+        user.roles.forEach((role) => { userRoles+role.name+' '})
+        let userFields = [user.id, user.username, user.email, userRoles].flat();
+        userFields.forEach((data) => {
+            let td = document.createElement('td')
+            td.append(document.createTextNode(data))
+            row.append(td);
+        })
+
+
+        // row.append(document.createElement('td').append(document.createTextNode(user.username)))
+        //
+        //
+        // row.append(document.createElement('td').after(td => td.append(document.createTextNode(user.username))));
+        // row.append(document.createElement('td').append(document.createTextNode(user.email)));
+        // let userRoles = '';
+        // user.roles.forEach((role) => {
+        //     userRoles + role.name + ' ';
+        // });
+        // row.append(document.createElement('td').setAttribute('text', userRoles));
         let editButton = document.createElement('button');
         editButton.setAttribute('id', user.id)
         editButton.setAttribute('type', 'button');
@@ -74,4 +79,4 @@ $('table button[data-target="#Delete"]').on('click', function () {
     prepareDeleteModal(selctedUserID);
 })
 
-//DOMContentLoaded = drawUsersTable();
+DOMContentLoaded = drawUsersTable();

@@ -54,25 +54,25 @@
                         </tr>
                         </thead>
                         <tbody id="usersTable">
-                        <tr th:each="user: ${users} " th:attr="id=${user.getId()}">
-                            <td id="id" th:text="${user.getId()}">NULL</td>
-                            <td id="usernameTable" th:text="${user.getUsername()}">NULL</td>
-                            <td id="emailTable" th:text="${user.getEmail()}">NULL</td>
-                            <td id="roleTable" th:text="${user.rolesToString()}">NULL</td>
-                            <th>
-                                <button th:attr="id=${user.getId()}" type="button" class="btn btn-primary"
-                                        data-toggle="modal" data-target="#Edit">
-                                    Edit
-                                </button>
-                            </th>
-                            <th>
-                                <button th:attr="id=${user.getId()}" type="button" class="btn"
-                                        style="background-color: brown; border-color: brown; color: #fff;"
-                                        data-toggle="modal" data-target="#Delete">
-                                    Delete
-                                </button>
-                            </th>
-                        </tr>
+<!--                        <tr th:each="user: ${users} " th:attr="id=${user.getId()}">-->
+<!--                            <td id="id" th:text="${user.getId()}">NULL</td>-->
+<!--                            <td id="usernameTable" th:text="${user.getUsername()}">NULL</td>-->
+<!--                            <td id="emailTable" th:text="${user.getEmail()}">NULL</td>-->
+<!--                            <td id="roleTable" th:text="${user.rolesToString()}">NULL</td>-->
+<!--                            <th>-->
+<!--                                <button th:attr="id=${user.getId()}" type="button" class="btn btn-primary"-->
+<!--                                        data-toggle="modal" data-target="#Edit">-->
+<!--                                    Edit-->
+<!--                                </button>-->
+<!--                            </th>-->
+<!--                            <th>-->
+<!--                                <button th:attr="id=${user.getId()}" type="button" class="btn"-->
+<!--                                        style="background-color: brown; border-color: brown; color: #fff;"-->
+<!--                                        data-toggle="modal" data-target="#Delete">-->
+<!--                                    Delete-->
+<!--                                </button>-->
+<!--                            </th>-->
+<!--                        </tr>-->
                         </tbody>
                     </table>
                 </div>
