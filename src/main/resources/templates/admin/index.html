@@ -57,15 +57,15 @@
                                 <td id="emailTable" th:text="${user.getEmail()}">NULL</td>
                                 <td id="roleTable" th:text="${user.rolesToString()}">NULL</td>
                                 <th>
-                                    <button th:attr="id=${user.getId()}" type="button" class="btn btn-primary"
-                                            data-toggle="modal" data-target="#Edit">
+                                    <button th:attr="id=${user.getId()}, data-target=${'#Edit' + user.getId()}" type="button" class="btn btn-primary"
+                                            data-toggle="modal">
                                         Edit
                                     </button>
                                 </th>
                                 <th>
-                                    <button th:attr="id=${user.getId()}" type="button" class="btn"
+                                    <button th:attr="id=${user.getId()}, data-target=${'#Delete' + user.getId()}" type="button" class="btn"
                                             style="background-color: brown; border-color: brown; color: #fff;"
-                                            data-toggle="modal" data-target="#Delete">
+                                            data-toggle="modal">
                                         Delete
                                     </button>
                                 </th>
@@ -114,35 +114,10 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="Edit" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+<!--    "action", `/admin/${selctedUserID}/edit`).append()-->
+<!--    "action", `/admin/${selctedUserID}/delete`-->
+    <div class="modal fade" th:each="user: ${users} " th:attr="id=${'Edit' + user.getId()}" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <script>
-            $('table .btn-primary').on('click', function () {
-                let selctedUserID = $(this).attr("id")
-                prepareEditModal(selctedUserID)
-            })
-
-            function prepareEditModal(selctedUserID) {
-                $("#Edit #idEdit").val(selctedUserID);
-                $("#Edit #username").val($(`tr[id=${selctedUserID}] td[id=usernameTable]`).text());
-                $("#Edit #email").val($(`tr[id=${selctedUserID}] td[id=emailTable]`).text());
-                $("#Edit form").attr("action", `/admin/${selctedUserID}/edit`).append();
-            }
-
-            $('table .btn').on('click', function () {
-                let selctedUserID = $(this).attr("id")
-                prepareDeleteModal(selctedUserID)
-            })
-
-            function prepareDeleteModal(selctedUserID) {
-                $("#Delete #userDeleteForm").attr("action", `/admin/${selctedUserID}/delete`).append();
-                $("#Delete #idDelete").val(selctedUserID);
-                $("#Delete #usernameDelete").val($(`tr[id=${selctedUserID}] td[id=usernameTable]`).text());
-                $("#Delete #emailDelete").val($(`tr[id=${selctedUserID}] td[id=emailTable]`).text());
-            }
-
-
-        </script>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -152,21 +127,21 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="align-middle" novalidate method="POST" id="userData">
+                    <form class="align-middle" novalidate method="POST" th:attr="id=${'formFor' + user.getId()}" th:action="@{/admin/{id}/edit(id=${user.getId()})}">
                         <div class="mx-auto text-center" style="width: 40%;">
                             <label for="idEdit"><b class="align-middle">ID</b></label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="idEdit" placeholder="ID" readonly>
+                                <input type="text" class="form-control" id="idEdit" th:value="${user.getId()}" readonly>
                             </div>
                             <label for="username"><b>Username</b></label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="username" name="username"
-                                       placeholder="Username" required>
+                                       placeholder="Username" th:value="${user.getUsername()}" required>
                             </div>
                             <label for="email"><b>Email</b></label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="email" name="email"
-                                       placeholder="email@example.com" required>
+                                       placeholder="email@example.com" th:value="${user.getEmail()}" required>
                             </div>
                             <label for="password"><b>Password</b></label>
                             <div class="input-group">
@@ -183,12 +158,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" form="userData" class="btn btn-primary">Edit</button>
+                    <button type="submit" th:form="${'formFor' + user.getId()}" class="btn btn-primary">Edit</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="Delete" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+    <div class="modal fade" th:each="user: ${users}" th:attr="id=${'Delete' + user.getId()}" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -198,21 +173,21 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="align-middle" novalidate method="POST" id="userDeleteForm">
+                    <form class="align-middle" novalidate method="POST" th:attr="id=${'delete' + user.getId()}" th:action="@{/admin/{id}/delete(id=${user.getId()})}">
                         <div class="mx-auto text-center" style="width: 40%;">
                             <label for="idDelete"><b class="align-middle">ID</b></label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="idDelete" placeholder="ID" readonly>
+                                <input type="text" class="form-control" name="id" id="idDelete" placeholder="ID" th:value="${user.getId()}" readonly>
                             </div>
                             <label for="usernameDelete"><b>Username</b></label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="usernameDelete"
-                                       placeholder="Username" readonly>
+                                       placeholder="Username" readonly th:value="${user.getUsername()}">
                             </div>
                             <label for="emailDelete"><b>Email</b></label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="emailDelete"
-                                       placeholder="email@example.com" readonly>
+                                       placeholder="email@example.com" readonly th:value="${user.getEmail()}">
                             </div>
                             <label for="roleDelete"><b>Role</b></label>
                             <select multiple class="form-control" size="2" id="roleDelete"
@@ -225,7 +200,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" form="userDeleteForm" class="btn btn-primary"
+                    <button type="submit" th:form="${'delete' + user.getId()}" class="btn btn-primary"
                             style="background-color: brown; border-color: brown; color: #fff;">Delete
                     </button>
                 </div>
