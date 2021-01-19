@@ -44,10 +44,10 @@ public class RESTController {
         return preparedUsers;
     }
 
-    @GetMapping("/roles")
-    public List<Role> getRoles() {
-        return userService.getAllRoles();
-    }
+//    @GetMapping("/roles")
+//    public List<Role> getRoles() {
+//        return userService.getAllRoles();
+//    }
 
     @PostMapping("/create")
     public User createUser() {
@@ -57,5 +57,10 @@ public class RESTController {
     @PostMapping("/edit")
     public User eitUser() {
         return null;
+    }
+
+    @PostMapping("/delete/{id}")
+    public void delete(@PathVariable("id") long id) {
+        userService.remove(id);
     }
 }

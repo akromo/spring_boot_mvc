@@ -54,25 +54,6 @@
                         </tr>
                         </thead>
                         <tbody id="usersTable">
-<!--                        <tr th:each="user: ${users} " th:attr="id=${user.getId()}">-->
-<!--                            <td id="id" th:text="${user.getId()}">NULL</td>-->
-<!--                            <td id="usernameTable" th:text="${user.getUsername()}">NULL</td>-->
-<!--                            <td id="emailTable" th:text="${user.getEmail()}">NULL</td>-->
-<!--                            <td id="roleTable" th:text="${user.rolesToString()}">NULL</td>-->
-<!--                            <th>-->
-<!--                                <button th:attr="id=${user.getId()}" type="button" class="btn btn-primary"-->
-<!--                                        data-toggle="modal" data-target="#Edit">-->
-<!--                                    Edit-->
-<!--                                </button>-->
-<!--                            </th>-->
-<!--                            <th>-->
-<!--                                <button th:attr="id=${user.getId()}" type="button" class="btn"-->
-<!--                                        style="background-color: brown; border-color: brown; color: #fff;"-->
-<!--                                        data-toggle="modal" data-target="#Delete">-->
-<!--                                    Delete-->
-<!--                                </button>-->
-<!--                            </th>-->
-<!--                        </tr>-->
                         </tbody>
                     </table>
                 </div>
@@ -82,7 +63,7 @@
                     <h3>Add new user</h3>
                 </div>
                 <div class="align-middle py-2" style="background-color: #fff; border: grey;">
-                    <form class="needs-validation" novalidate th:method="POST" th:action="@{/admin}">
+                    <form class="needs-validation" id="newUserForm" th:method="POST" th:action="@{/admin}">
                         <div class="mx-auto text-center" style="width: 40%;">
                             <label for="usernameС">Username </label>
                             <div class="input-group">
@@ -202,7 +183,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" form="userDeleteForm" class="btn btn-primary"
+                <button type="button" class="btn btn-primary" id="confirmDeleteUserBtn" data-dismiss="modal"
                         style="background-color: brown; border-color: brown; color: #fff;">Delete
                 </button>
             </div>

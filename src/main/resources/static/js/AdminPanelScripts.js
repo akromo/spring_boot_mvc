@@ -8,10 +8,24 @@ async function prepareEditModal(selctedUserID) {
 
 async function prepareDeleteModal(selctedUserID) {
     let userData = await getUserData(selctedUserID);
-    $("#Delete #userDeleteForm").attr("action", `/admin/${selctedUserID}/delete`).append();
+    //$("#Delete #userDeleteForm").attr("action", `/admin/${selctedUserID}/delete`).append();
     $("#Delete #idDelete").val(selctedUserID);
     $("#Delete #usernameDelete").val(userData.username);
     $("#Delete #emailDelete").val(userData.email);
+    let deleteButton = await document.getElementById('confirmDeleteUserBtn');
+    deleteButton.setAttribute('onclick', `deleteUser(${selctedUserID})`);
+}
+
+async function deleteUser(userId) {
+    await fetch(`/rest/delete/${userId}`, {
+        method: 'POST'
+    });
+    let row = await document.getElementsByName(`rowForUser${userId}`);
+    row.forEach((el)=>{el.remove()});
+}
+
+async function createUser() {
+
 }
 
 async function drawUsersTable() {
@@ -22,44 +36,43 @@ async function drawUsersTable() {
     }
     usersData.forEach((user) => {
         let row = document.createElement('tr');
+        row.setAttribute('name', `rowForUser${user.id}`);
         // 6 id username email role edit delete
-        let userRoles = '';
-        user.roles.forEach((role) => { userRoles+role.name+' '})
-        let userFields = [user.id, user.username, user.email, userRoles].flat();
+        let userFields = [user.id, user.username, user.email, user.roles];
         userFields.forEach((data) => {
             let td = document.createElement('td')
-            td.append(document.createTextNode(data))
+            if (Array.isArray(data)) {
+                data.forEach((role) => {
+                    td.append(document.createTextNode(role.name+' '));
+                })
+            }else {
+                td.append(document.createTextNode(data));
+            }
             row.append(td);
         })
-
-
-        // row.append(document.createElement('td').append(document.createTextNode(user.username)))
-        //
-        //
-        // row.append(document.createElement('td').after(td => td.append(document.createTextNode(user.username))));
-        // row.append(document.createElement('td').append(document.createTextNode(user.email)));
-        // let userRoles = '';
-        // user.roles.forEach((role) => {
-        //     userRoles + role.name + ' ';
-        // });
-        // row.append(document.createElement('td').setAttribute('text', userRoles));
+        let editTd = document.createElement('th')
         let editButton = document.createElement('button');
         editButton.setAttribute('id', user.id)
         editButton.setAttribute('type', 'button');
         editButton.setAttribute('class', 'btn btn-primary');
         editButton.setAttribute('data-toggle', 'modal');
         editButton.setAttribute('data-target', '#Edit');
-        editButton.setAttribute('text', 'Edit');
-        row.append(document.createElement('td').append(editButton)); //<button th:attr="id=${user.getId()}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#Edit">
+        editButton.textContent = 'Edit';
+        editButton.setAttribute('onclick', `prepareEditModal(${BigInt(user.id)})`);
+        editTd.append(editButton);
+        row.append(editTd);
+        let deleteTd = document.createElement('th');
         let deleteButton = document.createElement('button');
-        editButton.setAttribute('id', user.id)
-        editButton.setAttribute('type', 'button');
-        editButton.setAttribute('class', 'btn');
-        editButton.setAttribute('data-toggle', 'modal');
-        editButton.setAttribute('data-target', '#Delete');
-        editButton.setAttribute('text', 'Delete');
-        editButton.setAttribute('style', 'background-color: brown; border-color: brown; color: #fff;');
-        row.append(document.createElement('td').append(deleteButton));
+        deleteButton.setAttribute('id', user.id)
+        deleteButton.setAttribute('type', 'button');
+        deleteButton.setAttribute('class', 'btn');
+        deleteButton.setAttribute('data-toggle', 'modal');
+        deleteButton.setAttribute('data-target', '#Delete');
+        deleteButton.textContent = 'Delete';
+        deleteButton.setAttribute('onclick', `prepareDeleteModal(${BigInt(user.id)})`);
+        deleteButton.setAttribute('style', 'background-color: brown; border-color: brown; color: #fff;');
+        deleteTd.append(deleteButton)
+        row.append(deleteTd);
         table.append(row);
     });
 }
@@ -69,14 +82,16 @@ async function getUserData(userID) {
     return await userData.json();
 }
 
-$('table button[data-target="#Edit"]').on('click', function () {
-    let selctedUserID = $(this).attr("id");
-    prepareEditModal(selctedUserID);
-})
-
-$('table button[data-target="#Delete"]').on('click', function () {
-    let selctedUserID = $(this).attr("id");
-    prepareDeleteModal(selctedUserID);
-})
+// $('table button[data-target="#Edit"]').on('click', function () {
+//     alert('Перехват #Edit')
+//     let selctedUserID = $(this).attr("id");
+//     prepareEditModal(selctedUserID);
+// })
+//
+// $('table button[data-target="#Delete"]').on('click', function () {
+//     alert('Перехват #Delete')
+//     let selctedUserID = $(this).attr("id");
+//     prepareDeleteModal(selctedUserID);
+// })
 
 DOMContentLoaded = drawUsersTable();
