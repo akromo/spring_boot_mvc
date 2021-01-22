@@ -32,14 +32,14 @@
         <h1>Admin panel</h1>
         <ul class="nav nav-tabs" style="border-color: gray">
             <li class="nav-item" style="border-color: gray">
-                <a class="nav-link active" data-toggle="tab" href="#list">Users table</a>
+                <a class="nav-link active" id="usersTableLink" data-toggle="tab" href="#usersTableTab">Users table</a>
             </li>
             <li class="nav-item" style="border-color: gray">
-                <a class="nav-link" data-toggle="tab" href="#newUser">New User</a>
+                <a class="nav-link" data-toggle="tab" id="newUserLink" href="#newUserTab">New User</a>
             </li>
         </ul>
         <div class="tab-content" style="border-color: gray; background-color: #fff;">
-            <div class="tab-pane fade show active" id="list" style="border-color: gray">
+            <div class="tab-pane fade show active" id="usersTableTab" style="border-color: gray">
                 <h3 style="border-color: gray">All users:</h3>
                 <div class="container-fluid px-0 m-0" style="border-color: gray">
                     <table  class="table" style="border-color: gray;">
@@ -58,30 +58,30 @@
                     </table>
                 </div>
             </div>
-            <div class="tab-pane fade" id="newUser">
+            <div class="tab-pane fade" id="newUserTab">
                 <div class="py-2">
                     <h3>Add new user</h3>
                 </div>
                 <div class="align-middle py-2" style="background-color: #fff; border: grey;">
                     <form class="needs-validation" id="newUserForm" th:method="POST" th:action="@{/admin}">
                         <div class="mx-auto text-center" style="width: 40%;">
-                            <label for="usernameС">Username </label>
+                            <label for="newUsername">Username </label>
                             <div class="input-group">
-                                <input req type="text" class="form-control" name="userName" id="usernameС"
+                                <input type="text" class="form-control" name="userName" id="newUsername"
                                        placeholder="Username" required>
                             </div>
-                            <label for="emailС">Email </label>
+                            <label for="newEmail">Email </label>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="email" id="emailС"
+                                <input type="text" class="form-control" name="email" id="newEmail"
                                        placeholder="email@example.com" required>
                             </div>
-                            <label for="passwordС">Password </label>
+                            <label for="newPassword">Password </label>
                             <div class="input-group">
-                                <input type="password" class="form-control" name="password" id="passwordС"
+                                <input type="password" class="form-control" name="password" id="newPassword"
                                        placeholder="Password" required>
                             </div>
-                            <label for="roleС">Role </label>
-                            <select class="custom-select d-block w-100" size="2" id="roleС" name="selectedRoles"
+                            <label for="newSelectedRoles">Role </label>
+                            <select class="custom-select d-block w-100" size="2" id="newSelectedRoles" name="selectedRoles"
                                     multiple
                                     required>
                                 <option th:each="role : ${BDroles}" th:text="${role.getName()}"
@@ -91,7 +91,7 @@
                         <br>
                         <button class="btn"
                                 style="position: relative; left: 50%; transform: translate(-50%, 0); background-color: green; border-color: green; color: #fff; width: 30%;"
-                                type="submit"> Create
+                                type="button" onclick="createUser()"> Create
                         </button>
                     </form>
                 </div>
@@ -141,7 +141,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" form="userData" class="btn btn-primary">Edit</button>
+                <button type="button" form="userData" class="btn btn-primary" id="confirmEditUserBtn" data-dismiss="modal">Edit</button>
             </div>
         </div>
     </div>

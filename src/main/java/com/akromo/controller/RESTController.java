@@ -3,9 +3,11 @@ package com.akromo.controller;
 import com.akromo.models.Role;
 import com.akromo.models.User;
 import com.akromo.service.UserService;
+import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -23,7 +25,7 @@ public class RESTController {
         preparedUser.setUsername(rawUser.getUsername());
         preparedUser.setEmail(rawUser.getEmail());
         preparedUser.setId(rawUser.getId());
-        for (Role role: rawUser.getRoles()) {
+        for (Role role : rawUser.getRoles()) {
             preparedUser.getRoles().add(new Role(role.getName()));
         }
         return preparedUser;
@@ -38,7 +40,7 @@ public class RESTController {
     @GetMapping("/users")
     public List<User> users() {
         List<User> preparedUsers = new ArrayList<>();
-        for(User user: userService.listUsers()) {
+        for (User user : userService.listUsers()) {
             preparedUsers.add(prepareUser(user));
         }
         return preparedUsers;
@@ -50,13 +52,23 @@ public class RESTController {
 //    }
 
     @PostMapping("/create")
-    public User createUser() {
-        return null;
+    public void createUser(@RequestBody User user) {
+        List<Role> newRoleList = new ArrayList<>();
+        for (Role role: user.getRoles()) {
+            newRoleList.add(userService.getRoleByName(role.getName()));
+        }
+        user.setRoles(newRoleList);
+        userService.add(user);
     }
 
     @PostMapping("/edit")
-    public User eitUser() {
-        return null;
+    public void eitUser(@RequestBody User user) {
+        List<Role> newRoleList = new ArrayList<>();
+        for (Role role: user.getRoles()) {
+            newRoleList.add(userService.getRoleByName(role.getName()));
+        }
+        user.setRoles(newRoleList);
+        userService.updateUser(user);
     }
 
     @PostMapping("/delete/{id}")

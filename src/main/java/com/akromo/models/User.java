@@ -35,6 +35,11 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    public User(String username, String email, String password) {
+        this(username, email);
+        this.setPassword(password);
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }

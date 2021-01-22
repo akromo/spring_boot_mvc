@@ -4,11 +4,12 @@ async function prepareEditModal(selctedUserID) {
     $("#Edit #username").val(userData.username);
     $("#Edit #email").val(userData.email);
     $("#Edit form").attr("action", `/admin/${selctedUserID}/edit`).append();
+    let editButton = await document.getElementById('confirmEditUserBtn');
+    editButton.setAttribute('onclick', `editUser()`);
 }
 
 async function prepareDeleteModal(selctedUserID) {
     let userData = await getUserData(selctedUserID);
-    //$("#Delete #userDeleteForm").attr("action", `/admin/${selctedUserID}/delete`).append();
     $("#Delete #idDelete").val(selctedUserID);
     $("#Delete #usernameDelete").val(userData.username);
     $("#Delete #emailDelete").val(userData.email);
@@ -25,14 +26,51 @@ async function deleteUser(userId) {
 }
 
 async function createUser() {
+    await fetch('/rest/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            "username": $('#newUserForm #newUsername').val(),
+            "email": $('#newUserForm #newEmail').val(),
+            "password": $('#newUserForm #newPassword').val(),
+            'roles': $('#newUserForm #newSelectedRoles').val()
+        })
+    });
+    await drawUsersTable();
+    let usersTableTab = document.getElementById('usersTableTab');
+    usersTableTab.setAttribute('class', 'tab-pane fade show active')
+    let usersTableLink = document.getElementById("usersTableLink")
+    usersTableLink.setAttribute('class', 'nav-link active')
+    let newUserTab = document.getElementById('newUserTab');
+    newUserTab.setAttribute('class', 'tab-pane fade')
+    let newUserLink = document.getElementById("newUserLink")
+    newUserLink.setAttribute('class', 'nav-link')
+}
 
+async function editUser() {
+    await fetch('/rest/edit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            "id": $("#Edit #idEdit").val(),
+            "username": $('#Edit #username').val(),
+            "email": $('#Edit #email').val(),
+            "password": $('#newUserForm #newPassword').val(),
+            'roles': $('#Edit #role').val()
+        })
+    });
+    await drawUsersTable();
 }
 
 async function drawUsersTable() {
     let usersData = await fetch('/rest/users').then(response => response.json());
     let table = document.getElementById('usersTable');
-    for (element in table.tbody) {
-        element.remove();
+    while (table.childNodes.length !=0) {
+        table.childNodes.forEach((node) => {node.remove()});
     }
     usersData.forEach((user) => {
         let row = document.createElement('tr');
@@ -81,17 +119,4 @@ async function getUserData(userID) {
     let userData = await fetch(`/rest/user/${userID}`);
     return await userData.json();
 }
-
-// $('table button[data-target="#Edit"]').on('click', function () {
-//     alert('Перехват #Edit')
-//     let selctedUserID = $(this).attr("id");
-//     prepareEditModal(selctedUserID);
-// })
-//
-// $('table button[data-target="#Delete"]').on('click', function () {
-//     alert('Перехват #Delete')
-//     let selctedUserID = $(this).attr("id");
-//     prepareDeleteModal(selctedUserID);
-// })
-
 DOMContentLoaded = drawUsersTable();
