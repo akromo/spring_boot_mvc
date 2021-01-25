@@ -61,7 +61,7 @@ public class RESTController {
         userService.add(user);
     }
 
-    @PostMapping("/edit")
+    @PutMapping("/edit") //PUT
     public void eitUser(@RequestBody User user) {
         List<Role> newRoleList = new ArrayList<>();
         for (Role role: user.getRoles()) {
@@ -71,7 +71,7 @@ public class RESTController {
         userService.updateUser(user);
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}") //DELETE
     public void delete(@PathVariable("id") long id) {
         userService.remove(id);
     }
