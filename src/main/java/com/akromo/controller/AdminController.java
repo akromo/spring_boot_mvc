@@ -1,9 +1,15 @@
 package com.akromo.controller;
 
 
+import com.akromo.dao.ManDAO;
+import com.akromo.models.Man;
+import com.akromo.models.Passport;
 import com.akromo.models.Role;
 import com.akromo.models.User;
 import com.akromo.service.UserService;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +21,28 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
+@Slf4j
 public class AdminController {
-
     private final UserService userService;
+    private final ManDAO md;
 
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, ManDAO md) {
         this.userService = userService;
+        this.md = md;
     }
 
     @GetMapping
     public String index(Model model) {
+        Passport passport = new Passport();
+        passport.setSerial("1488");
+        passport.setNumber("228822");
+        Man man = new Man();
+        man.setFirstName("Shkololo");
+        man.setLastName("Trololo");
+        man.setDateOfBirth("just now");
+        man.setPassport(passport);
+        md.saveMan(man);
+        log.info("WARN Logger is here WARN {}", model);
         model.addAttribute("users", userService.listUsers());
         model.addAttribute("BDroles", userService.getAllRoles());
         return "admin/index";
@@ -70,10 +88,13 @@ public class AdminController {
 
     @ModelAttribute("CurrentUser")
     public User addUser(Principal principal) {
-        User user = null;
-        if (principal != null) {
-            user = userService.getUserByName(principal.getName());
-        }
+        User user = new User();
+        user.setEmail("Test");
+        user.getRoles().add(new Role("ADMIN"));
+        user.getRoles().add(new Role("User"));
+//        if (principal != null) {
+//            user = userService.getUserByName(principal.getName());
+//        }
         return user;
     }
 }
